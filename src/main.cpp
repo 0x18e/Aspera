@@ -110,8 +110,8 @@ int main(int argc, char* argv[]){
 
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char* data;	
-#ifdef __WIN32
-	unsigned char* data = stbi_load("W:\\Projects\\repos\\Aspera\\textures\\debug_empty.png",
+#ifdef _WIN64
+	data = stbi_load("W:\\Projects\\repos\\Aspera\\textures\\debug_empty.png",
 		&width, &height, &nrChannels, 0);
 #endif
 #ifdef __APPLE__
@@ -130,7 +130,7 @@ int main(int argc, char* argv[]){
 
 
 	// i like to load shaders at the end, dont know why it just makes sense to me.
-#ifdef __WIN32
+#ifdef _WIN32
 	Shader shader("W:\\Projects\\repos\\Aspera\\shaders\\vertex.vs", "W:\\Projects\\repos\\Aspera\\shaders\\fragment.fs");
 #endif
 #ifdef __APPLE__
