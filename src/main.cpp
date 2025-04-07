@@ -28,15 +28,18 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-int main(){
+int main(int argc, char* argv[]){
 	
+	LOG("argv: " << argv[0] << '\n');
 	//initialize glfw
 	if (!glfwInit()){
 		LOG("Could not initialize glfw");
 	}
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	// on macos, the opengl version has to be set explicitly to 3 or it throws a segfault? what voodoo shit is this
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	
+
 	GLFWwindow* window = glfwCreateWindow(800, 600, "lorem ipsum", nullptr, nullptr);
 
 	glfwMakeContextCurrent(window);
@@ -106,9 +109,15 @@ int main(){
 	int width, height, nrChannels;
 
 	stbi_set_flip_vertically_on_load(true);
+	unsigned char* data;	
+#ifdef __WIN32
 	unsigned char* data = stbi_load("W:\\Projects\\repos\\Aspera\\textures\\debug_empty.png",
 		&width, &height, &nrChannels, 0);
-
+#endif
+#ifdef __APPLE__
+	LOG("loading texture on apple");
+	data = stbi_load("../textures/debug_empty.png", &width, &height, &nrChannels, 0);
+#endif
 	if (data) {
 		// to whatever is bound to our current gl_texture2d, heres what it is, and its data.
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -121,9 +130,12 @@ int main(){
 
 
 	// i like to load shaders at the end, dont know why it just makes sense to me.
-
+#ifdef __WIN32
 	Shader shader("W:\\Projects\\repos\\Aspera\\shaders\\vertex.vs", "W:\\Projects\\repos\\Aspera\\shaders\\fragment.fs");
-
+#endif
+#ifdef __APPLE__
+	Shader shader("../shaders/vertex.vs", "../shaders/fragment.fs");
+#endif
 	// this is the part that might really fuck me over
 	// before running, we make sure that our sampler knows that GL_TEXTURE_2D, is bound to GL_TEXTURE_0
 	// if this never happens then it never knows where this textures location belongs in.
@@ -171,10 +183,6 @@ int main(){
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
-
-
-
-
 
 
 
