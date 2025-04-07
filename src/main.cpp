@@ -104,7 +104,7 @@ int main(int argc, char* argv[]){
 	glBindTexture(GL_TEXTURE_2D, debug_texture); // we bind GL_TEXTURE_2D to our current texture
 	
 	// parameters can be set here and all that, probably before as well.
-
+	//test comment
 	// Load our textures data and hold its width and height variables
 	int width, height, nrChannels;
 
