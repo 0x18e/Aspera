@@ -30,6 +30,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 int main(int argc, char* argv[]){
 	
+	float window_width, window_height;
+	window_width = 800.0f;
+	window_height = 600.0f;
 	LOG("argv: " << argv[0] << '\n');
 	//initialize glfw
 	if (!glfwInit()){
@@ -40,7 +43,7 @@ int main(int argc, char* argv[]){
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	
 
-	GLFWwindow* window = glfwCreateWindow(800, 600, "lorem ipsum", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(window_width, window_height, "lorem ipsum", nullptr, nullptr);
 
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -52,138 +55,127 @@ int main(int argc, char* argv[]){
 		return -1;
 	}
 
+	// Transforming random things using matrix math
+	// example! moving vector (1, 0, 0) by (1, 1, 0)
+	glm::vec4 vec = glm::vec4(1, 0, 0, 1); // the last 1 is our homogenous coordinate
+	glm::mat4 identity = glm::mat4(1.0f); // create our identity matrix,
+	glm::vec3 mov(1, 1, 0);
+	glm::mat4 trans = glm::translate(identity, mov); // this is now the matrix we need to multiply stuff
 
-	// general positions, imagine you're writing vertices for an actual square.
-	// generally in opengl this isnt what usually happens, you would load models from blender
-	float vertices[] = {
-		// positions          // texture coords
-		 0.5f,  0.5f, 0.0f,   1.0f, 1.0f, // top right
-		 0.5f, -0.5f, 0.0f,   1.0f, 0.0f, // bottom right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // bottom left
-		-0.5f,  0.5f, 0.0f,   0.0f, 1.0f  // top left 
-	};
+	vec = trans * vec;
 
-
-	// for the EBO
-	unsigned int indices[] = {
-		0, 1, 3, // first triangle
-		1, 2, 3  // second triangle
-	};
-
-	// create our buffers
-	unsigned int VBO, VAO, EBO;
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO); // make our ebo as well
-	glGenVertexArrays(1, &VAO);
+	LOG("x: " << vec.x << ", y: " << vec.y << ", z: " << vec.z);
 	
-	glBindVertexArray(VAO); // now any calls to VAO or our EBO would happen here
+	// vertices
+	float vertices[] = {
+		// positions		// colors		// texture coords
+		-0.5f, 0.5, 0.0f, 0.5f, 0.5f, 0.5f,	0.0f, 1.0f, // top left corner
+		-0.5f, -0.5f, 0.0f, 0.5f, 0.5f, 0.5f, 0.0f, 0.0f, // bottom left
+		0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f, 1.0f, 1.0f, // top right
+		0.5f, -0.5f, 0.0f, 0.5f, 0.2f, 0.4f, 1.0f, 0.0f	// bottom right
+	};
+	int indices[] = {
+		0, 2, 1, // first triangle
+		3, 2, 1 // second triangle
+	};
 
-	// now we feed our data into our VBO
-	glBindBuffer(GL_ARRAY_BUFFER, VBO); // bind our buffer first
+	unsigned int VAO, VBO, EBO;
+
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO); // bind our current buffer
+	glGenVertexArrays(1, &VAO); // create our vertex array object
+	glBindVertexArray(VAO); // bind our vertex array!!
+
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	
-	// setup our EBO, cause i forgot
+	// bind stuff to the EBO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	// data has been fed into our current GL_ARRAY_BUFFER object
-	// check later
-	//glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind our buffer, might be a mistake
-
-	// fill in our vertex attribute pointers
-	// layout location for our position
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(0));
+	// layout location = 0, positions!
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(0));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1); // enable our tex coords after we filled them
-
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
 	
+	// load texture
+	unsigned int texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	// set the texture wrapping/filtering options (on the currently bound texture object)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	int width, height, channel_count;
 
-	// create our texture
-	unsigned int debug_texture;
-	glGenTextures(1, &debug_texture); // create texture
-	glBindTexture(GL_TEXTURE_2D, debug_texture); // we bind GL_TEXTURE_2D to our current texture
-	
-	// parameters can be set here and all that, probably before as well.
-	//test comment
-	// Load our textures data and hold its width and height variables
-	int width, height, nrChannels;
-
-	stbi_set_flip_vertically_on_load(true);
-	unsigned char* data;	
-#ifdef _WIN64
-	data = stbi_load("W:\\Projects\\repos\\Aspera\\textures\\debug_empty.png",
-		&width, &height, &nrChannels, 0);
-#endif
-#ifdef __APPLE__
-	LOG("loading texture on apple");
-	data = stbi_load("../textures/debug_empty.png", &width, &height, &nrChannels, 0);
-#endif
+	unsigned char* data = stbi_load("W:\\Projects\\repos\\Aspera\\textures\\debug_empty.png",
+		&width, &height, &channel_count, 0);
+	// check if data actually got put in
 	if (data) {
-		// to whatever is bound to our current gl_texture2d, heres what it is, and its data.
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
-		LOG("Loaded texture data");
 	}
 	else {
-		LOG("Could not load texture data");
+		LOG("Did not load texture properly");
 	}
 
-
-	// i like to load shaders at the end, dont know why it just makes sense to me.
-#ifdef _WIN32
-	Shader shader("W:\\Projects\\repos\\Aspera\\shaders\\vertex.vs", "W:\\Projects\\repos\\Aspera\\shaders\\fragment.fs");
-#endif
-#ifdef __APPLE__
-	Shader shader("../shaders/vertex.vs", "../shaders/fragment.fs");
-#endif
-	// this is the part that might really fuck me over
-	// before running, we make sure that our sampler knows that GL_TEXTURE_2D, is bound to GL_TEXTURE_0
-	// if this never happens then it never knows where this textures location belongs in.
-	shader.use();
-	shader.SetInt("texture1", 0); 
-
-	while (!glfwWindowShouldClose(window)) {
-		glClear(GL_COLOR_BUFFER_BIT);
-		glClearColor(0.0f, 0.0f, 0.3f, 1.0f);
-		
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, debug_texture);
-
-		shader.use();
-		
-		// here is the hard part, matrix logic, it all makes sense but does the code check out?
-		// initialize our matrices with their identity matrix
-		glm::mat4 model = glm::mat4(1.0f); 
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 projection = glm::mat4(1.0f);
-		
-		// rotate our camera by -55 degrees
-		//model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		
-		// move our camera backwards
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-		
-		//setup the projection matrix, first argument can be seen as fov
-		projection = glm::perspective(glm::radians(90.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+	//TODO: CREATE THE FRUSTUM
+	// Also add the projection, view, and model matrices to our shaders
+	// this computation i believe is needed only once unless, the vertices move a lot.
 	
-		// retrieve the matrix uniform locations
-		unsigned int modelLoc = glGetUniformLocation(shader.ID, "model");
-		unsigned int viewLoc = glGetUniformLocation(shader.ID, "view");
-		unsigned int projLoc = glGetUniformLocation(shader.ID, "projection");
+	// matrices need to be read from left to right!
+	// so all orders of multiplication need to be flipped
+	glm::mat4 projection, model, view;
 
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-		// render container
+	model = glm::mat4(1.0f); // create our identity matrix, all diagonals are 1
+	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // rotate about the x
+	
+	view = glm::mat4(1.0f); // identity matrix!!
+
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+	// the reason this is -3.0f, is because to go backwards we shift the whole scene forwards
+
+	// last thing to make is the projection matrix, we will be using perspective matrix
+	// cause perspective...
+	projection = glm::perspective(glm::radians(54.0f), window_width / window_height, 0.1f, 100.0f);
+
+	// now to send them off to the shader!
+
+
+
+	// create our shader
+	Shader shader("W:\\Projects\\repos\\Aspera\\shaders\\vert.vs", "W:\\Projects\\repos\\Aspera\\shaders\\frag.fs");
+	// since this is a 2d triangle, we just draw it now
+	shader.use();
+	shader.SetInt("missing_texture", 0);
+
+	
+	shader.SetMat4("model", model);
+	shader.SetMat4("view", view);
+	shader.SetMat4("projection", projection);
+
+	glEnable(GL_DEPTH_TEST);
+	while (!glfwWindowShouldClose(window)) {
+
+		processInput(window);
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		model = glm::rotate(model, ((float)glfwGetTime() * 0.3f )* glm::radians(10.0f), glm::vec3(0.5f, 0.0f, 0.0f));
+		shader.SetMat4("model", model);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		shader.use();
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		
-
-		processInput(window);
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
-
+	
 
 
 	return 0;
