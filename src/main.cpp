@@ -6,7 +6,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#define LOG(x) std::cout << x << '\n';
+#include "tools.h"
+#include<vector>
+#include "Mesh.h"
 // important early goals
 /*use RAII*/
 /*kernighan and ritchie convention*/
@@ -29,7 +31,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 int main(int argc, char* argv[]){
-	
+    	
 	float window_width, window_height;
 	window_width = 800.0f;
 	window_height = 600.0f;
@@ -67,60 +69,41 @@ int main(int argc, char* argv[]){
 	LOG("x: " << vec.x << ", y: " << vec.y << ", z: " << vec.z);
 	
 	// vertices
-	float vertices[] = {
+    float vertices[] = {
 		// positions		// colors		// texture coords
 		-0.5f, 0.5, 0.0f, 0.5f, 0.5f, 0.5f,	0.0f, 1.0f, // top left corner
 		-0.5f, -0.5f, 0.0f, 0.5f, 0.5f, 0.5f, 0.0f, 0.0f, // bottom left
 		0.5f, 0.5f, 0.0f, 0.5f, 0.5f, 0.5f, 1.0f, 1.0f, // top right
 		0.5f, -0.5f, 0.0f, 0.5f, 0.2f, 0.4f, 1.0f, 0.0f	// bottom right
 	};
-	int indices[] = {
-		0, 2, 1, // first triangle
+    Vertex v1;
+    Vertex v2;
+    Vertex v3;
+    Vertex v4;
+    v1.position = {-0.5f, 0.5f, 0.0f};
+    v1.colors = {0.5f, 0.5f, 0.5f};
+    v1.texture_coordinates = {0.0f, 1.0f};
+
+    v2.position = {-0.5f, -0.5f, 0.0f};
+    v2.colors = {0.5f, 0.5f, 0.5f};
+    v2.texture_coordinates = {0.0f, 0.0f};
+
+    v3.position = {0.5f, 0.5f, 0.0f};
+    v3.colors = {0.5f, 0.5f, 0.5f};
+    v3.texture_coordinates = {1.0f, 1.0f};
+    
+    v4.position = {0.5f, -0.5f, 0.0f};
+    v4.colors = {0.5f, 0.2f, 0.4f};
+    v4.texture_coordinates = {1.0f, 0.0f};
+
+    std::vector<Vertex> vector_vertices = {v1, v2, v3, v4};
+    std::vector<unsigned int> indices = {
+        0, 2, 1, // first triangle
 		3, 2, 1 // second triangle
 	};
-
-	unsigned int VAO, VBO, EBO;
-
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO); // bind our current buffer
-	glGenVertexArrays(1, &VAO); // create our vertex array object
-	glBindVertexArray(VAO); // bind our vertex array!!
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    std::vector<Texture> text;
+    Mesh mesh(vector_vertices, indices, text);
 	
-	// bind stuff to the EBO
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-	// layout location = 0, positions!
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(0));
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-	
-	// load texture
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	// set the texture wrapping/filtering options (on the currently bound texture object)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	int width, height, channel_count;
-
-	unsigned char* data = stbi_load("W:\\Projects\\repos\\Aspera\\textures\\debug_empty.png",
-		&width, &height, &channel_count, 0);
-	// check if data actually got put in
-	if (data) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else {
-		LOG("Did not load texture properly");
-	}
 
 	//TODO: CREATE THE FRUSTUM
 	// Also add the projection, view, and model matrices to our shaders
@@ -130,6 +113,7 @@ int main(int argc, char* argv[]){
 	// so all orders of multiplication need to be flipped
 	glm::mat4 projection, model, view;
 
+    // the model matrix is the thing that each object needs to have on its own
 	model = glm::mat4(1.0f); // create our identity matrix, all diagonals are 1
 	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // rotate about the x
 	
@@ -140,14 +124,19 @@ int main(int argc, char* argv[]){
 
 	// last thing to make is the projection matrix, we will be using perspective matrix
 	// cause perspective...
-	projection = glm::perspective(glm::radians(54.0f), window_width / window_height, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(90.0f), window_width / window_height, 0.1f, 100.0f);
 
 	// now to send them off to the shader!
 
 
 
 	// create our shader
+    #ifdef WIN32
 	Shader shader("W:\\Projects\\repos\\Aspera\\shaders\\vert.vs", "W:\\Projects\\repos\\Aspera\\shaders\\frag.fs");
+    #endif
+    #ifdef linux
+    Shader shader("../shaders/vert.vs", "../shaders/frag.fs");
+    #endif
 	// since this is a 2d triangle, we just draw it now
 	shader.use();
 	shader.SetInt("missing_texture", 0);
@@ -166,12 +155,7 @@ int main(int argc, char* argv[]){
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		model = glm::rotate(model, ((float)glfwGetTime() * 0.3f )* glm::radians(10.0f), glm::vec3(0.5f, 0.0f, 0.0f));
 		shader.SetMat4("model", model);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		shader.use();
-		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		
+        mesh.Draw(shader);
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
