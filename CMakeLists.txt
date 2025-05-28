@@ -22,6 +22,8 @@ target_link_directories(Aspera PRIVATE
 target_link_libraries(Aspera PRIVATE ${OPENGL_LIBRARIES})
 if (APPLE)
 target_link_libraries(Aspera PRIVATE OpenGL::GL glfw)
+elseif(LINUX)
+target_link_libraries(Aspera PRIVATE OpenGL::GL glfw)
 else()
 target_link_libraries(Aspera PRIVATE OpenGL::GL glfw3)
 endif()
