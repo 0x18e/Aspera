@@ -9,21 +9,23 @@ file(GLOB_RECURSE SOURCES "${PROJECT_SOURCE_DIR}/src/*.cpp" "${PROJECT_SOURCE_DI
 
 
 find_package(OpenGL REQUIRED)
+
 if (APPLE)
 find_package(glfw3 REQUIRED)
 message(STATUS "Compiling for mac")
 endif()
 add_executable(Aspera ${SOURCES})
-target_include_directories(Aspera PUBLIC "${PROJECT_SOURCE_DIR}/include/")
+target_include_directories(Aspera PUBLIC "${PROJECT_SOURCE_DIR}/include/") # should include assimp files as well
 target_link_directories(Aspera PRIVATE
     "${CMAKE_SOURCE_DIR}/lib/"
 )
 
 target_link_libraries(Aspera PRIVATE ${OPENGL_LIBRARIES})
 if (APPLE)
-target_link_libraries(Aspera PRIVATE OpenGL::GL glfw)
+target_link_libraries(Aspera PRIVATE glfw)
 elseif(LINUX)
-target_link_libraries(Aspera PRIVATE OpenGL::GL glfw)
+target_link_libraries(Aspera PRIVATE glfw)
 else()
-target_link_libraries(Aspera PRIVATE OpenGL::GL glfw3)
+message(STATUS "Linking assimp-vc143")
+target_link_libraries(Aspera PRIVATE glfw3 assimp-vc143-mtd)
 endif()

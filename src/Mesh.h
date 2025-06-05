@@ -15,8 +15,6 @@ struct Vertex {
 
 struct Texture {
     unsigned int ID;
-
-
 };
 
 class Mesh {

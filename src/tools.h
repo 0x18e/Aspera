@@ -3,7 +3,7 @@
 #include<iostream>
 
 //define debug macro
-#define DEBUG 0
+#define DEBUG 1
 #ifdef DEBUG
 #define LOG(x) std::cout << x << '\n'
 #else
