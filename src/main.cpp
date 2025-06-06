@@ -1,6 +1,8 @@
 #include "Engine.h"
 
 #include "Mesh.h"
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
 // important early goals
 /*use RAII*/
 /*kernighan and ritchie convention*/
@@ -19,7 +21,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 int main(int argc, char* argv[]){
     
-
+    aiNode * node;
+    Assimp::Importer importer;
+    importer.IsExtensionSupported("ext");
 	Engine engine;
 
 	engine.Initialize();

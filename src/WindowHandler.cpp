@@ -1,6 +1,5 @@
 #include "WindowHandler.h"
-
-
+#include "GLFW/glfw3.h"
 
 void FrameBufferSizeCallback(GLFWwindow* window, int x, int y) {
 	glViewport(0, 0, x, y);
@@ -40,4 +39,9 @@ bool WindowHandler::ChangeResolution(int x, int y) {
 
 
 WindowHandler::~WindowHandler() {
+    LOG("Cleaning up window");
+    if (this->m_pWindow != nullptr){
+        glfwDestroyWindow(this->m_pWindow);
+        LOG("Window destroyed");
+    }
 }
