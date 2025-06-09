@@ -26,7 +26,7 @@ private:
 	std::string m_Name;
 	
 	
-	bool CreateWindow(int width, int height);
+	bool CreateWindow(int width, int height, std::string name="Lorem Ipsum");
 };
 
 void FrameBufferSizeCallback(GLFWwindow* window, int x, int y);

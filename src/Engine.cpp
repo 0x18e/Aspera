@@ -1,5 +1,13 @@
 #include "Engine.h"
 
+Engine::Engine() {
+
+}
+
+Engine::~Engine() {
+	this->Exit();
+}
+
 bool Engine::Initialize() {
 
 	if (!glfwInit()) {
@@ -12,6 +20,10 @@ bool Engine::Initialize() {
 	// Do window stuff here
 
 	if (!this->m_WindowHandler.Init()) {
+		return false;
+	}
+
+	if (!InputHandler::Get().Init(this->m_WindowHandler.GetWindow())) {
 		return false;
 	}
 	
@@ -27,15 +39,21 @@ bool Engine::Initialize() {
 
 void Engine::Run() {
 	while (!glfwWindowShouldClose(m_WindowHandler.GetWindow())) { // make this look nicer, put it into a function in the handler
-
-		//processInput(m_WindowHandler.GetWindow()); // use the input handler here to poll
+		// input first!
+		InputHandler::Get().Update();
+		
+		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(1.0f, 0.0f, 0.0f, 1.0f); // red
 
+	
+
 		
-
-
-		glfwPollEvents();
 		glfwSwapBuffers(m_WindowHandler.GetWindow());
 	}
+}
+
+void Engine::Exit() {
+	// I have no idea what to write here.
+	
 }

@@ -5,10 +5,10 @@ void FrameBufferSizeCallback(GLFWwindow* window, int x, int y) {
 	glViewport(0, 0, x, y);
 }
 
-bool WindowHandler::CreateWindow(int width, int height) {
+bool WindowHandler::CreateWindow(int width, int height, std::string name) {
 	// This should never be called im just testing some stuff
 	LOG("Creating Window");
-	this->m_pWindow = glfwCreateWindow(width, height, "Lorem Ipsum", nullptr, nullptr);
+	this->m_pWindow = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr);
 	if (!m_pWindow) {
 		LOG("Could not create window");
 		return false;
@@ -42,6 +42,8 @@ WindowHandler::~WindowHandler() {
     LOG("Cleaning up window");
     if (this->m_pWindow != nullptr){
         glfwDestroyWindow(this->m_pWindow);
+		this->m_pWindow = nullptr;
+		this->m_Name.clear();
         LOG("Window destroyed");
     }
 }

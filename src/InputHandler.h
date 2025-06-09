@@ -2,21 +2,28 @@
 #include<unordered_map>
 #include<string>
 #include<GLFW/glfw3.h>
+#include "tools.h"
 
-enum ButtonState {NONE, PRESSED, HELD, RELEASED};
-struct InputState{
-	std::unordered_map<std::string, ButtonState> events;
-};
 
 
 class InputHandler {
-public:	
-	InputState m_InputState;
-	void Init(GLFWwindow const &window);
+private:
+	static InputHandler m_sInstance;
+	GLFWwindow* m_pWindow;
+	InputHandler();
+	
+public:
+	static InputHandler& Get() {
+		return m_sInstance;
+	}
+
+	bool Init(GLFWwindow *window);
 
 	void Update();
-	bool IsHeld(std::string event);
-	bool IsPressed(std::string event);
-	bool IsReleased(std::string event);
-	void Exit();
+	// Minimal approach to input, later on will add previously held keys, vs current keys, etc.
+	bool IsHeld(int key);
+	bool IsPressed(int key);
+	bool IsReleased(int key);
+	void Cleanup();
+	~InputHandler();
 };

@@ -13,6 +13,7 @@
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
+#include "InputHandler.h"
 
 
 
@@ -29,8 +30,8 @@ private:
 	
 
 public:
-	Engine() {};
-	~Engine() {} ;
+	Engine();
+	~Engine();
 	bool Initialize();
 	void Run();
 	void Exit();
