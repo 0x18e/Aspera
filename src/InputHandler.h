@@ -17,7 +17,7 @@ public:
 		return m_sInstance;
 	}
 
-	bool Init(GLFWwindow *window);
+	bool Init(GLFWwindow &window);
 
 	void Update();
 	// Minimal approach to input, later on will add previously held keys, vs current keys, etc.

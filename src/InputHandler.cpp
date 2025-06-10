@@ -3,8 +3,8 @@
 
 InputHandler InputHandler::m_sInstance;
 
-bool InputHandler::Init(GLFWwindow *window) {
-	this->m_pWindow = window;
+bool InputHandler::Init(GLFWwindow &window) {
+	this->m_pWindow = &window;
 	if (!m_pWindow) {
 		LOG("Input window pointer is garbage");
 		return false;
@@ -33,8 +33,9 @@ bool InputHandler::IsReleased(int key) {
 }
 
 void InputHandler::Cleanup() {
-	if (this->m_pWindow != nullptr) {
-		LOG("Window still not deleted?");
+	if (this->m_pWindow) {
+		// Dangling pointers
+		m_pWindow = nullptr;
 	}
 }
 InputHandler::InputHandler() {	

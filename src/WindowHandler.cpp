@@ -28,8 +28,6 @@ bool WindowHandler::Init(int width, int height, std::string name) {
 	// no need for error checking here this should be managed by whoever is using this
 	this->m_nWindowWidth = width;
 	this->m_nWindowHeight = height;
-
-	
 	return this->CreateWindow(this->m_nWindowWidth, m_nWindowHeight);
 }
 
@@ -40,7 +38,8 @@ bool WindowHandler::ChangeResolution(int x, int y) {
 
 WindowHandler::~WindowHandler() {
     LOG("Cleaning up window");
-    if (this->m_pWindow != nullptr){
+	LOG(m_pWindow);
+    if (this->m_pWindow != nullptr) {
         glfwDestroyWindow(this->m_pWindow);
 		this->m_pWindow = nullptr;
 		this->m_Name.clear();

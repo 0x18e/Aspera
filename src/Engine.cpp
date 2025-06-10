@@ -1,7 +1,7 @@
 #include "Engine.h"
 
 Engine::Engine() {
-
+	this->Initialize();
 }
 
 Engine::~Engine() {
@@ -23,7 +23,7 @@ bool Engine::Initialize() {
 		return false;
 	}
 
-	if (!InputHandler::Get().Init(this->m_WindowHandler.GetWindow())) {
+	if (!InputHandler::Get().Init(*m_WindowHandler.GetWindow())) {
 		return false;
 	}
 	

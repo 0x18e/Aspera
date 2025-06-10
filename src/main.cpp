@@ -13,14 +13,9 @@
 
 
 int main(int argc, char* argv[]){
-    
 	Engine engine;
 
-	engine.Initialize();
 	engine.Run();
-
-	
-
 
 	return 0;
 }
