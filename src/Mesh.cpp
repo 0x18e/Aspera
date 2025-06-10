@@ -38,6 +38,8 @@ void Mesh::SetupMesh() {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+
+	// This stuff shouldnt be here but I was testing
    #ifdef WIN32
 	data = stbi_load("W:\\Projects\\repos\\Aspera\\textures\\debug_empty.png",
 		&width, &height, &channel_count, 0);

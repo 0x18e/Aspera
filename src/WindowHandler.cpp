@@ -6,9 +6,11 @@ void FrameBufferSizeCallback(GLFWwindow* window, int x, int y) {
 }
 
 bool WindowHandler::CreateWindow(int width, int height, std::string name) {
-	// This should never be called im just testing some stuff
 	LOG("Creating Window");
-	this->m_pWindow = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr);
+	this->m_pWindow = glfwCreateWindow(width, height,
+		name.c_str(),
+		nullptr,
+		nullptr);
 	if (!m_pWindow) {
 		LOG("Could not create window");
 		return false;
@@ -16,7 +18,8 @@ bool WindowHandler::CreateWindow(int width, int height, std::string name) {
 
 	glfwMakeContextCurrent(this->m_pWindow);
 	glfwSetFramebufferSizeCallback(this->m_pWindow, FrameBufferSizeCallback);
-	glfwSetWindowSizeLimits(this->m_pWindow, this->m_nWindowWidth, this->m_nWindowHeight,
+	glfwSetWindowSizeLimits(this->m_pWindow, this->m_nWindowWidth,
+		this->m_nWindowHeight,
 		this->m_nWindowWidth,
 		this->m_nWindowHeight
 	);
