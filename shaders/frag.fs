@@ -1,5 +1,5 @@
 #version 330 core
-
+// I have no idea how to use proper convention for glsl? just stick to using hungarian notation i guess!?
 out vec4 FragColor;
 in vec3 c;
 in vec2 texture_coordinates;
