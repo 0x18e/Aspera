@@ -1,21 +1,20 @@
 #pragma once
 #include<iostream>
-
+#include "Model.h"
 #include "glad/glad.h"
 #include "WindowHandler.h"
 #include "stb_image.h"
 #include "Shader.h"
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
 #include "tools.h"
 #include<vector>
-#include "assimp/Importer.hpp"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
 #include "InputHandler.h"
 
-
+/*TODO
+* REWRITE THE ENTIRE Model.h class, this has a lot of weird code copied from opengl
+* Use relative paths instead of just hardcoding them.
+* fix the whole thing with having the TextureFromFile function be defined in multiple translation units
+* 
+*/
 
 
 class Engine {

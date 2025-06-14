@@ -7,6 +7,31 @@
 #include "tools.h"
 
 
+#define MAX_BONE_INFLUENCE 4
+
+struct Vertex {
+    // position
+    glm::vec3 position;
+    // normal
+    glm::vec3 normal;
+    // texCoords
+    glm::vec2 texture_coordinates;
+    // tangent
+    glm::vec3 Tangent;
+    // bitangent
+    glm::vec3 Bitangent;
+    //bone indexes which will influence this vertex
+    int m_BoneIDs[MAX_BONE_INFLUENCE];
+    //weights from each bone
+    float m_Weights[MAX_BONE_INFLUENCE];
+};
+
+struct Texture {
+    unsigned int id;
+    std::string type;
+    std::string path;
+};
+/*
 // Structs use sequential memory.
 // Use better naming conventions, really nit picking here. Stick to Hungarian
 struct Vertex {
@@ -21,7 +46,7 @@ struct Texture {
     unsigned int ID;
     std::string type;
 };
-
+*/
 
 class Mesh {
     // This class is good but a part of it borrows a lot from the learnopengl website. Which is fine, just shouldnt be
