@@ -58,7 +58,8 @@ private:
             return;
         }
         // retrieve the directory path of the filepath
-        directory = path.substr(0, path.find_last_of('/'));
+        directory = path.substr(0, path.find_last_of('\\'));
+        LOG("Directory here: " << directory);
 
         // process ASSIMP's root node recursively
         processNode(scene->mRootNode, scene);
@@ -190,9 +191,8 @@ private:
             if (!skip)
             {   // if texture hasn't been loaded already, load it
                 Texture texture;
-                //texture.id = TextureFromFile(str.C_Str(), this->directory);
-                // This needs to change as well, relative paths instead of hard coding every path
-                texture.id = TextureFromFile(str.C_Str(), "W:\\Projects\\repos\\Aspera\\models");
+                texture.id = TextureFromFile(str.C_Str(), this->directory);
+                //texture.id = TextureFromFile(str.C_Str(), "W:\\Projects\\repos\\Aspera\\models");
                 texture.type = typeName;
                 texture.path = str.C_Str();
                 textures.push_back(texture);

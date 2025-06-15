@@ -67,7 +67,7 @@ void Engine::Run() {
 		ourShader.use();
 
 		glm::mat4 view = glm::mat4(1.0f);
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -9.0f));
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(45.0f), (float)m_WindowHandler.GetWidth() / m_WindowHandler.GetHeight(), 0.1f, 100.0f);
 		ourShader.SetMat4("projection", projection);
@@ -75,7 +75,7 @@ void Engine::Run() {
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));	// it's a bit too big for our scene, so scale it down
-		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, (float)glfwGetTime() * glm::radians(45.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 		ourShader.SetMat4("model", model);
 		ourModel.Draw(ourShader);
 		
