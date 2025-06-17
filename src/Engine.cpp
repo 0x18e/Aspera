@@ -51,11 +51,16 @@ void Engine::Run() {
 
 	// load models
 	// -----------
-	Model ourModel("W:\\Projects\\repos\\Aspera\\models\\cat22.obj");
+	Model ourModel("W:\\Projects\\repos\\Aspera\\models\\Tommy Vercetti.obj");
 #endif // WIN64
 
 
-
+	glm::vec3 CameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
+	
+	// Temp code
+	const float radius = 10.0f;
+	
+	
 	while (!glfwWindowShouldClose(m_WindowHandler.GetWindow())) { // make this look nicer, put it into a function in the handler
 		// input first!
 		InputHandler::Get().Update();
@@ -67,8 +72,31 @@ void Engine::Run() {
 		ourShader.use();
 		
 		// This is where the view was originally working, this is where the w mov
+		
+		glm::vec3 CameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);// This would usually be what we're looking at
+		// This gives us the direction that the camera is facing, i hate writing comments like these.
+		// But im stupid enough to need them.
+		glm::vec3 CameraDirection = glm::normalize(CameraPosition - CameraTarget);
+		glm::vec3 up = glm::vec3(0, 1.0f, 0.0f);
+		glm::vec3 CameraRight = glm::normalize(glm::cross(up, CameraDirection));
+		// Gives right axis for camera
+		glm::vec3 CameraUp = glm::cross(CameraDirection, CameraRight); // checks out
+		
+
+		/* // Usage of glm::lookAt();
+		glm::mat4 view;
+		view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f),
+			glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::vec3(0.0f, 1.0f, 0.0f));
+		*/
+		/* //Debugging view code
 		glm::mat4 view = glm::mat4(1.0f);
 		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -6.0f)); // would be the camera's view matrix
+		*/
+		float camX = sin(glfwGetTime()) * radius;
+		float camZ = cos(glfwGetTime()) * radius;
+		glm::mat4 view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
+
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(45.0f), (float)m_WindowHandler.GetWidth() / m_WindowHandler.GetHeight(), 0.1f, 100.0f);
 		ourShader.SetMat4("projection", projection);
@@ -76,7 +104,7 @@ void Engine::Run() {
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
-		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, (float)glfwGetTime() * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		ourShader.SetMat4("model", model);
 		ourModel.Draw(ourShader);
 		

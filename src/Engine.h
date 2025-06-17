@@ -31,7 +31,7 @@ class Engine {
 
 private:
 	WindowHandler m_WindowHandler;
-	
+	float dt; // Handling delta time, about time I added this
 
 public:
 	Engine();

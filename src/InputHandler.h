@@ -5,6 +5,7 @@
 #include "tools.h"
 
 
+void MouseCallback();
 
 class InputHandler {
 private:
