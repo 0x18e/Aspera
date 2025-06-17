@@ -6,8 +6,13 @@
 #include "stb_image.h"
 #include "Shader.h"
 #include "tools.h"
+#include "Camera.h"
 #include<vector>
 #include "InputHandler.h"
+#include <glm/common.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 
 /*TODO
 * REWRITE THE ENTIRE Model.h class, this has a lot of weird code copied from opengl

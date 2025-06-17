@@ -1,12 +1,11 @@
 #pragma once
 #include <glad/glad.h> // include glad to get the required OpenGL headers
+#include <glm/gtc/type_ptr.hpp>
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <glm/common.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+
 class Shader {
 
 
