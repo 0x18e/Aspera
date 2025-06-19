@@ -18,6 +18,12 @@ glm::mat4& Camera::GetViewMatrix() {
 
 void Camera::Update() {
 	// Handle camera input here
+	// Rotation input would be here.
+	/*
+	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	direction.y = sin(glm::radians(pitch));
+	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	*/
 }
 
 Camera::~Camera() {

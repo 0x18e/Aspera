@@ -51,7 +51,7 @@ void Engine::Run() {
 
 	// load models
 	// -----------
-	Model ourModel("W:\\Projects\\repos\\Aspera\\models\\Tommy Vercetti.obj");
+	Model ourModel("W:\\Projects\\repos\\Aspera\\models\\sandFloor.obj");
 #endif // WIN64
 
 
