@@ -9,7 +9,6 @@ bool InputHandler::Init(GLFWwindow &window) {
 		LOG("Input window pointer is garbage");
 		return false;
 	}
-
 	return true;
 }
 

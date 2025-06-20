@@ -9,13 +9,5 @@
 #else
 #define LOG(x)
 #endif
-
-// should be the base error object when something fails to load
-class CPurpleError {
-
-    glm::mat4 model; // base errors model matrix
-
-
-
-};
+#define VSYNC 1
 

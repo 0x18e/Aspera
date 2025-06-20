@@ -5,6 +5,9 @@
 #include<glm/vec3.hpp>
 #include<glm/mat3x3.hpp>
 #include<glm/ext/matrix_transform.hpp>
+#include "InputHandler.h"
+
+
 
 class Camera {
 
@@ -14,6 +17,7 @@ public:
 	void SetCameraPosition(const glm::vec3& position);
 	void SetCameraVelocity(const glm::vec3& velocity);
 	void SetCameraSpeed(const float& speed);
+	void MoveCamera(); // Change this later, really bad right now just temporary
 	glm::mat4& GetViewMatrix();
 	void Update();
 
