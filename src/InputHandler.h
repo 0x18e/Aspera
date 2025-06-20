@@ -8,11 +8,6 @@
 void MouseCallback();
 
 class InputHandler {
-private:
-	static InputHandler m_sInstance;
-	GLFWwindow* m_pWindow;
-	InputHandler();
-	
 public:
 	static InputHandler& Get() {
 		return m_sInstance;
@@ -27,4 +22,9 @@ public:
 	bool IsReleased(int key);
 	void Cleanup();
 	~InputHandler();
+
+private:
+	static InputHandler m_sInstance;
+	GLFWwindow* m_pWindow;
+	InputHandler();
 };

@@ -7,17 +7,26 @@ void FrameBufferSizeCallback(GLFWwindow* window, int x, int y) {
 	glViewport(0, 0, x, y);
 }
 
+void WindowHandler::ShowCursor(bool showval) {
+	this->m_bShowCursor = showval;
+}
+
+bool WindowHandler::CursorStatus() {
+	return this->m_bShowCursor;
+}
+
 bool WindowHandler::CreateWindow(int width, int height, std::string name) {
 	LOG("Creating Window");
 	this->m_pWindow = glfwCreateWindow(width, height,
 		name.c_str(),
 		nullptr,
 		nullptr);
+	
 	if (!m_pWindow) {
 		LOG("Could not create window");
 		return false;
 	}
-
+	
 	glfwMakeContextCurrent(this->m_pWindow);
 	glfwSetFramebufferSizeCallback(this->m_pWindow, FrameBufferSizeCallback);
 	glfwSetWindowSizeLimits(this->m_pWindow, this->m_nWindowWidth,
@@ -25,7 +34,7 @@ bool WindowHandler::CreateWindow(int width, int height, std::string name) {
 		this->m_nWindowWidth,
 		this->m_nWindowHeight
 	);
-
+	
 	return true;
 }
 

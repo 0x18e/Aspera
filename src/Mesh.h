@@ -49,21 +49,19 @@ struct Texture {
 */
 
 class Mesh {
-    // This class is good but a part of it borrows a lot from the learnopengl website. Which is fine, just shouldnt be
-    // Permanent
+  public:
+    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+    void Draw(Shader &shader);
+    unsigned int VAO, VBO, EBO; // Change later!! stick to hungarian notation!!!
+    void SetupMesh();
+private:
+    // This class is good but a part of it borrows a lot from the learnopengl website. 
+    // It should not be permanently here however. Heavy refactoring later!!
     std::vector<Vertex> m_Vertices;
     std::vector<unsigned int> m_Indices;
     std::vector<Texture> m_Textures;
     unsigned int m_texture;
     unsigned char* m_pszData;
     int m_nWidth, m_nHeight, m_nChannelCount;
-
-   
-  public:
-    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
-    void Draw(Shader &shader);
-    unsigned int VAO, VBO, EBO; // Change later!! stick to hungarian notation!!!
-    void SetupMesh();
-
 
 };

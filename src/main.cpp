@@ -4,11 +4,10 @@
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 // important early goals
-/*use RAII*/
-/*kernighan and ritchie convention*/
-/*hungarian notation*/
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
+// use RAII
+// kernighan and ritchie convention
+// hungarian notation
+// use public, protected, private conventions.
 
 
 int main(int argc, char* argv[]){

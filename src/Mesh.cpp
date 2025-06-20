@@ -73,9 +73,9 @@ void Mesh::SetupMesh() {
 void Mesh::Draw(Shader &shader){
 
 	/*
-	* I am ashamed to say that this code is not mine, I took this from the opengl website, I need to do more research
-	* on what a better method might be, or really try to understand shaders and then write my own implementation.
-	* For now, I really just want to start making my own game.
+	* I took this from the opengl website, I need to do more research
+	* on what a better method might be, or really try to understand shaders & write my own implementation.
+	* For now.
 	*/
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
@@ -100,16 +100,6 @@ void Mesh::Draw(Shader &shader){
 	glDrawElements(GL_TRIANGLES, m_Indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
-
-
-
-	/* //Old code that needs to go anyways, a better approach that ill take from the learnogl website here
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_texture);
-	shader.use();
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	*/
 
 };
 

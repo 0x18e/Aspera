@@ -6,11 +6,6 @@
 // This class follows RAII
 
 class WindowHandler {
-	
-private:
-	bool m_bShowCursor;
-	static WindowHandler m_WindowInstance;
-	WindowHandler() : m_nWindowHeight(800), m_nWindowWidth(1280), m_pWindow(nullptr), m_bShowCursor(false) { LOG("Should run on stack"); }
 
 public:
 	bool Init(int width = 1280, int height = 800, std::string name = "Lorem Ipsum");
@@ -27,11 +22,19 @@ public:
 
 
 private:
+
+	bool m_bShowCursor;
+	static WindowHandler m_WindowInstance;
+	WindowHandler() : m_nWindowHeight(800), m_nWindowWidth(1280), m_pWindow(nullptr), m_bShowCursor(false) {
+		glfwSetInputMode(this->m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+
 	GLFWwindow* m_pWindow;
 	int m_nWindowWidth;
 	int m_nWindowHeight;
 	std::string m_Name;
-	
+	void ShowCursor(bool show);
+	bool CursorStatus();
 	
 	bool CreateWindow(int width, int height, std::string name="Lorem Ipsum");
 };
