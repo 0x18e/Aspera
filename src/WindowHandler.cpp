@@ -1,6 +1,8 @@
 #include "WindowHandler.h"
 #include "GLFW/glfw3.h"
 
+
+WindowHandler WindowHandler::m_WindowInstance;
 void FrameBufferSizeCallback(GLFWwindow* window, int x, int y) {
 	glViewport(0, 0, x, y);
 }

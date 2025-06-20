@@ -1,13 +1,15 @@
 #include "Camera.h"
 
-float Camera::m_CameraSpeed = 5.0f; // maybe fast or slow i think depends on dt
-glm::vec3 Camera::m_CameraVelocity = glm::vec3(0.0f, 0.0f, 0.0f);
-glm::vec3 Camera::m_Position = glm::vec3(0.0f, 0.0f, 3.0f);
+//float Camera::m_CameraSpeed = 5.0f; // maybe fast or slow i think depends on dt
+//glm::vec3 Camera::m_CameraVelocity = glm::vec3(0.0f, 0.0f, 0.0f);
+//glm::vec3 Camera::m_Position = glm::vec3(0.0f, 0.0f, 3.0f);
+
 // You may be asking, why would the m_position vector have a z component of 3 instead of -3?
 // When the lookat function is used from glm it generates a transform matrix that translates in the opposite
 // direction of m_position. essentially shifting the whole world rather than actually moving the camera
 
 Camera::Camera() {
+
 	// Constructor
 	this->m_ViewMatrix = glm::mat4(1.0f);
 }
@@ -24,6 +26,8 @@ void Camera::Update() {
 	direction.y = sin(glm::radians(pitch));
 	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 	*/
+	// first argument is the camera position
+	glm::lookAt(this->m_CameraPosition, this->m_CameraPosition + this->m_CameraFront, this->m_UpAxis);
 }
 
 Camera::~Camera() {
@@ -32,11 +36,11 @@ Camera::~Camera() {
 	this->m_ViewMatrix = glm::mat4(1.0f);
 	this->m_CameraSpeed = 0.0f;
 	this->m_CameraVelocity = glm::vec3(0.0f);
-	this->m_Position = glm::vec3(0.0f);
+	this->m_CameraPosition = glm::vec3(0.0f);
 }
 
 void Camera::SetCameraPosition(const glm::vec3& position) {
-	this->m_Position = position;
+	this->m_CameraPosition = position;
 }
 
 void Camera::SetCameraVelocity(const glm::vec3& velocity) {

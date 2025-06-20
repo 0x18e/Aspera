@@ -9,9 +9,6 @@
 #include "Camera.h"
 #include<vector>
 #include "InputHandler.h"
-#include <glm/common.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 
 /*TODO
@@ -30,7 +27,8 @@ class Engine {
 	// Exit and cleanup everything USING THE RESOURCE MANAGER
 
 private:
-	WindowHandler m_WindowHandler;
+	//WindowHandler m_WindowHandler; // Now a singleton so this is no longer needed
+	
 	float dt; // Handling delta time, about time I added this
 
 public:

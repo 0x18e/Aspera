@@ -19,11 +19,13 @@ bool Engine::Initialize() {
 
 	// Do window stuff here
 
-	if (!this->m_WindowHandler.Init()) {
+	if (!WindowHandler::Get().Init()) {
+		LOG("Failed to initialize window");
 		return false;
 	}
 
-	if (!InputHandler::Get().Init(*m_WindowHandler.GetWindow())) {
+	if (!InputHandler::Get().Init(*WindowHandler::Get().GetWindow())) {
+		LOG("Failed to initialize input handler");
 		return false;
 	}
 	
@@ -33,7 +35,11 @@ bool Engine::Initialize() {
 		LOG("Failed to initialize glad functions");
 		return false;
 	}
+	// Certain textures seem to not be happy with this enabled, the base backpack from ogl
+	// works fine and it doesnt even complain about it when this is enabled.
+	// Any other texture seems to really disagree and it really wants this off in order to work. 
 	//stbi_set_flip_vertically_on_load(true);
+	
 	glEnable(GL_DEPTH_TEST);
 	return true;
 }
@@ -46,12 +52,14 @@ void Engine::Run() {
 	// This section here with shaders is just testing on both windows and linux
 #ifdef WIN32
 
-
+	// Another thing i need to understand, does each object have its own shader?
+	// Or is it just that this main model loading shader is to be used for all models
+	// and other models that have their own shaders can be used then and there.
 	Shader ourShader("W:\\Projects\\repos\\Aspera\\shaders\\model_loading.vs", "W:\\Projects\\repos\\Aspera\\shaders\\model_loading.fs");
 
 	// load models
 	// -----------
-	Model ourModel("W:\\Projects\\repos\\Aspera\\models\\sandFloor.obj");
+	Model ourModel("\\models\\Tommy Vercetti.obj");
 #endif // WIN64
 
 
@@ -61,7 +69,7 @@ void Engine::Run() {
 	const float radius = 10.0f;
 	
 	
-	while (!glfwWindowShouldClose(m_WindowHandler.GetWindow())) { // make this look nicer, put it into a function in the handler
+	while (!glfwWindowShouldClose(WindowHandler::Get().GetWindow())) { // make this look nicer, put it into a function in the handler
 		// input first!
 		InputHandler::Get().Update();
 		
@@ -98,7 +106,7 @@ void Engine::Run() {
 		glm::mat4 view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
 
 		glm::mat4 projection;
-		projection = glm::perspective(glm::radians(45.0f), (float)m_WindowHandler.GetWidth() / m_WindowHandler.GetHeight(), 0.1f, 100.0f);
+		projection = glm::perspective(glm::radians(45.0f), (float)WindowHandler::Get().GetWidth() / WindowHandler::Get().GetHeight(), 0.1f, 100.0f);
 		ourShader.SetMat4("projection", projection);
 		ourShader.SetMat4("view", view);
 		glm::mat4 model = glm::mat4(1.0f);
@@ -108,7 +116,7 @@ void Engine::Run() {
 		ourShader.SetMat4("model", model);
 		ourModel.Draw(ourShader);
 		
-		glfwSwapBuffers(m_WindowHandler.GetWindow());
+		glfwSwapBuffers(WindowHandler::Get().GetWindow());
 	}
 }
 

@@ -29,7 +29,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
 		fragment_code = frag_stream.str();
 	}
 	catch (std::ifstream::failure e) {
-		std::cout << "SHADER FILE NOT SUCCESSFULLY READ\n";
+		LOG("Could not read shader path : " << e.what());
 	}
 	const char* vert_code_c = vertex_code.c_str();
 	const char* frag_code_c = fragment_code.c_str();
@@ -62,7 +62,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
 	glCompileShader(fragment);
 	glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
 	if (!success) {
-		glGetShaderInfoLog(vertex, 512, nullptr, infoLog);
+		glGetShaderInfoLog(fragment, 512, nullptr, infoLog);
 		std::cout << "cant compile fragment shader " << infoLog << std::endl;
 	}
 
@@ -75,9 +75,10 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
 	glLinkProgram(ID);
 
 	glGetProgramiv(ID, GL_LINK_STATUS, &success);
+	glGetProgramInfoLog(ID, 512, nullptr, infoLog);
 
 	if (!success) {
-		std::cout << "COULD NOT LINK SHADER PROGRAM " << infoLog << std::endl;
+		LOG("Failed linking shader program: \n" << infoLog);
 	}
 
 	glDeleteShader(vertex);
