@@ -41,6 +41,9 @@ bool Engine::Initialize() {
 	//stbi_set_flip_vertically_on_load(true);
 	
 	glEnable(GL_DEPTH_TEST);
+	glfwSwapInterval(1); // vsync, use in fullscreen if possible
+	// glfw uses DwmFlush when vsync is on in windowed mode. Might lead to less than the refresh rate of monitor
+
 	return true;
 }
 
