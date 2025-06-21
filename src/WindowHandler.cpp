@@ -9,6 +9,10 @@ void FrameBufferSizeCallback(GLFWwindow* window, int x, int y) {
 
 void WindowHandler::ShowCursor(bool showval) {
 	this->m_bShowCursor = showval;
+	if (m_bShowCursor)
+		glfwSetInputMode(this->m_pWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	else
+		glfwSetInputMode(this->m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 bool WindowHandler::CursorStatus() {
@@ -34,7 +38,7 @@ bool WindowHandler::CreateWindow(int width, int height, std::string name) {
 		this->m_nWindowWidth,
 		this->m_nWindowHeight
 	);
-	
+	//glfwSetInputMode(this->m_pWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	return true;
 }
 

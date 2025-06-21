@@ -13,9 +13,6 @@
 
 /*TODO
 * REWRITE THE ENTIRE Model.h class, this has a lot of weird code copied from opengl
-* Use relative paths instead of just hardcoding them.
-* fix the whole thing with having the TextureFromFile function be defined in multiple translation units
-* 
 */
 
 

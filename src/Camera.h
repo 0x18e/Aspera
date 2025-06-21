@@ -1,11 +1,9 @@
 #pragma once
-
-
-
 #include<glm/vec3.hpp>
 #include<glm/mat3x3.hpp>
 #include<glm/ext/matrix_transform.hpp>
 #include "InputHandler.h"
+#include "WindowHandler.h"
 
 
 
@@ -41,6 +39,9 @@ private:
 
 	// need a view matrix
 	glm::mat4 m_ViewMatrix;
+
+	// Very temporary code for window focus
+	int state = 0;
 
 };
 

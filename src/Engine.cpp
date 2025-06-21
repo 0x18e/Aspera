@@ -64,6 +64,7 @@ void Engine::Run() {
 
 	// load models
 	// -----------
+	//Model ourModel("\\models\\cat22.obj");
 	Model ourModel("\\models\\Tommy Vercetti.obj");
 #endif // WIN64
 

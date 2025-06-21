@@ -30,7 +30,17 @@ glm::mat4& Camera::GetViewMatrix() {
 }
 
 void Camera::Update() {
+
+	
 	// Handle camera input here
+	// This might change
+	if (InputHandler::Get().IsPressed(GLFW_KEY_ESCAPE)) {
+		WindowHandler::Get().ShowCursor(true);
+	}
+	if (InputHandler::Get().IsPressed(GLFW_KEY_F1)) {
+		WindowHandler::Get().ShowCursor(false);
+	}
+	
 	// Rotation input would be here.
 	/*
 	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
