@@ -113,7 +113,12 @@ void Engine::Run() {
 		MainCamera.MoveCamera();
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(45.0f), (float)WindowHandler::Get().GetWidth() / WindowHandler::Get().GetHeight(), 0.1f, 100.0f);
-		ourShader.SetMat4("projection", projection);
+
+		if (InputHandler::Get().IsPressed(GLFW_KEY_F)) {
+			LOG("Running");
+			projection = glm::perspective(glm::radians(25.0f), (float)WindowHandler::Get().GetWidth() / WindowHandler::Get().GetHeight(), 0.1f, 100.0f);
+		}
+				ourShader.SetMat4("projection", projection);
 		ourShader.SetMat4("view", MainCamera.GetViewMatrix());
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
