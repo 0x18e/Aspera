@@ -19,7 +19,7 @@ bool Engine::Initialize() {
 
 	// Do window stuff here
 
-	if (!WindowHandler::Get().Init()) {
+	if (!WindowHandler::Get().Init(1920, 1080)) {
 		LOG("Failed to initialize window");
 		return false;
 	}
@@ -40,6 +40,8 @@ bool Engine::Initialize() {
 	// Any other texture seems to really disagree and it really wants this off in order to work. 
 	//stbi_set_flip_vertically_on_load(true);
 	
+	glfwSetCursorPosCallback(WindowHandler::Get().GetWindow(), InputHandler::Get().MouseCallback);
+
 	glEnable(GL_DEPTH_TEST);
 #ifdef VSYNC
 	glfwSwapInterval(1); // vsync, use in fullscreen if possible
@@ -49,6 +51,8 @@ bool Engine::Initialize() {
 	return true;
 }
 
+
+// TODO: USE camelCase
 void Engine::Run() {
 	
 	// load models
@@ -85,16 +89,7 @@ void Engine::Run() {
 
 		ourShader.use();
 		
-		// This is where the view was originally working, this is where the w mov
-		
-		glm::vec3 CameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);// This would usually be what we're looking at
-		// This gives us the direction that the camera is facing, i hate writing comments like these.
-		// But im stupid enough to need them.
-		glm::vec3 CameraDirection = glm::normalize(CameraPosition - CameraTarget);
-		glm::vec3 up = glm::vec3(0, 1.0f, 0.0f);
-		glm::vec3 CameraRight = glm::normalize(glm::cross(up, CameraDirection));
-		// Gives right axis for camera
-		glm::vec3 CameraUp = glm::cross(CameraDirection, CameraRight); // checks out
+
 		
 
 		/* // Usage of glm::lookAt();

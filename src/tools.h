@@ -11,3 +11,9 @@
 #endif
 #define VSYNC 1
 
+
+// Should be the default error box to exist
+class PurpleError {
+
+
+};

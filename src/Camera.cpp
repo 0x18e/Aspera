@@ -41,18 +41,18 @@ void Camera::Update() {
 		WindowHandler::Get().ShowCursor(false);
 	}
 	
+	glm::vec3 direction;
 	// Rotation input would be here.
-	/*
-	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	direction.y = sin(glm::radians(pitch));
-	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	*/
+	
+	direction.x = cos(glm::radians(InputHandler::Get().GetYaw())) * cos(glm::radians(InputHandler::Get().GetPitch()));
+	direction.y = sin(glm::radians(InputHandler::Get().GetPitch()));
+	direction.z = sin(glm::radians(InputHandler::Get().GetYaw())) * cos(glm::radians(InputHandler::Get().GetPitch()));
+	this->m_CameraFront = glm::normalize(direction);
 	// first argument is the camera position
 	this->m_ViewMatrix = glm::lookAt(this->m_CameraPosition, this->m_CameraPosition + this->m_CameraFront, this->m_UpAxis);
 }
 
 Camera::~Camera() {
-
 	// Resetting values, dont think i need to do this but we'll see, pretty sure i dont
 	this->m_ViewMatrix = glm::mat4(1.0f);
 	this->m_CameraSpeed = 0.0f;

@@ -39,9 +39,5 @@ private:
 
 	// need a view matrix
 	glm::mat4 m_ViewMatrix;
-
-	// Very temporary code for window focus
-	int state = 0;
-
 };
 
