@@ -1,7 +1,7 @@
 #pragma once
 #include "tools.h"
 #include "Camera.h"
-#include ""
+
 class Player {
 
 public:
@@ -12,8 +12,10 @@ public:
 private:
 	glm::vec3 m_Position;
 	glm::vec3 m_Velocity;
-
+	void UpdateCamera(); // This should update at the end of our move function
 	
+	
+	float m_fSpeed;
 	float m_fMass;
 	Camera m_Camera;
 };
