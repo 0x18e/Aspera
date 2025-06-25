@@ -8,7 +8,7 @@ public:
 	Player();
 	~Player();
 	void Move();
-	
+	void Spawn();
 private:
 	glm::vec3 m_Position;
 	glm::vec3 m_Velocity;

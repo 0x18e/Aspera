@@ -3,11 +3,11 @@
 
 
 Player::Player() {
-	this->m_fMass = 10.0f;
-	this->m_Velocity = glm::vec3(0.0f, 0.0f, 0.0f);
-	this->m_Position = glm::vec3(0, 0, 3); // our main position
+	
 }
+Player::~Player() {
 
+}
 //TODO work on player movement, aceleration, velocity, position gets updated, so does camera position as well.
 void Player::Move() {
 	/*
@@ -44,7 +44,13 @@ void Player::Move() {
 	*/
 }
 
-void Player::UpdateCamera() {
+void Player::Spawn() {
+	this->m_fMass = 10.0f;
+	this->m_Velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+	this->m_Position = glm::vec3(0, 0, 3); // our main position
+}
 
+void Player::UpdateCamera() {
+	// Maybe pass in our change in position as reference to update?
 	this->m_Camera.Update();
 }
