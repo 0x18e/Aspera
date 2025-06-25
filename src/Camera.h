@@ -17,6 +17,10 @@ public:
 	void SetCameraSpeed(const float& speed);
 	void MoveCamera(); // Change this later, really bad right now just temporary
 	glm::mat4& GetViewMatrix();
+
+	glm::vec3& GetFront();
+	glm::vec3& GetUpAxis();
+	
 	void Update();
 
 private:

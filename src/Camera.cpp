@@ -29,6 +29,13 @@ glm::mat4& Camera::GetViewMatrix() {
 	return this->m_ViewMatrix; // Should return the view matrix as a reference to be modified
 }
 
+glm::vec3& Camera::GetFront() {
+	return this->m_CameraFront;
+}
+glm::vec3& Camera::GetUpAxis() {
+	return this->m_UpAxis;
+}
+
 void Camera::Update() {
 
 	
