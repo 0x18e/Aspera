@@ -45,7 +45,8 @@ void Player::Move() {
 	*/
 	//this->m_CameraPosition.y = 0.0f;
 	
-
+	this->m_Position += m_Velocity * 1.0f / 144.0f;
+	
 	
 }
 
@@ -78,7 +79,7 @@ glm::vec3 Player::GetForwardVector() {
 
 CameraState Player::BuildCamera() {
 	CameraState state;
-	state.eyeOffset = glm::vec3(0.0f, 1.2f, 0.0f);
+	state.eyeOffset = glm::vec3(0.0f, 1.5f, 0.0f);
 	state.fov = this->m_fFov;
 	state.position = this->m_Position; // maybe add eyeOffset to this?
 	state.viewPunchAngles = this->m_LocalViewPunch;
