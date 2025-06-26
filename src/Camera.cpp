@@ -4,9 +4,14 @@
 //glm::vec3 Camera::m_CameraVelocity = glm::vec3(0.0f, 0.0f, 0.0f);
 //
 
+//TODO: take care of other variables that are unused here
 
 Camera::Camera() {
-
+	// view matrix HAS to be initialized, ALWAYS
+	this->m_ViewMatrix = glm::mat4(1.0f);
+	this->m_CameraSpeed = 0.05f; // will change according to dt
+	this->m_UpAxis = glm::vec3(0.0f, 1.0f, 0.0f);
+	/*
 	// Constructor
 	this->m_ViewMatrix = glm::mat4(1.0f);
 	this->m_CameraVelocity = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -22,7 +27,12 @@ Camera::Camera() {
 
 	// -1 for now cause we dont rotate, our front will always be front
 	this->m_CameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+	*/
+	
+}
 
+float Camera::GetSensitivity() {
+	return this->m_CameraSpeed;
 }
 
 glm::mat4& Camera::GetViewMatrix() {
@@ -36,9 +46,11 @@ glm::vec3& Camera::GetUpAxis() {
 	return this->m_UpAxis;
 }
 
-void Camera::Update() {
+// Take reference to player position and make that our position
+void Camera::Update(CameraState new_state) {
+	this->m_PreviousState = this->m_CurrentState;
+	this->m_CurrentState = new_state;
 
-	
 	// Handle camera input here
 	// This might change
 	if (InputHandler::Get().IsPressed(GLFW_KEY_ESCAPE)) {
@@ -48,24 +60,22 @@ void Camera::Update() {
 		WindowHandler::Get().ShowCursor(false);
 	}
 	
-	glm::vec3 direction;
-	// Rotation input would be here.
 	
-	direction.x = cos(glm::radians(InputHandler::Get().GetYaw())) * cos(glm::radians(InputHandler::Get().GetPitch()));
-	direction.y = sin(glm::radians(InputHandler::Get().GetPitch()));
-	direction.z = sin(glm::radians(InputHandler::Get().GetYaw())) * cos(glm::radians(InputHandler::Get().GetPitch()));
-	this->m_CameraFront = glm::normalize(direction);
 	
+	/*
+	* this is interesting.... maybe do it this way later but account for the direction as well.
+	m_Position = playerPosition + state.baseEyeOffset + state.viewPunchOffset + state.deathOffset + state.externalOffset;
+
+    m_ViewMatrix = glm::lookAt(m_Position, playerPosition + state.viewPunchOffset, glm::vec3(0, 1, 0));
+	*/
+
+
 	// first argument is the camera position
-	this->m_ViewMatrix = glm::lookAt(this->m_CameraPosition, this->m_CameraPosition + this->m_CameraFront, this->m_UpAxis);
+	this->m_ViewMatrix = glm::lookAt(this->m_CurrentState.position, this->m_CurrentState.position + this->m_CurrentState.forward, this->m_UpAxis);
 }
 
 Camera::~Camera() {
-	// Resetting values, dont think i need to do this but we'll see, pretty sure i dont
-	this->m_ViewMatrix = glm::mat4(1.0f);
-	this->m_CameraSpeed = 0.0f;
-	this->m_CameraVelocity = glm::vec3(0.0f);
-	this->m_CameraPosition = glm::vec3(0.0f);
+	LOG("Destroyed camera class");
 }
 
 void Camera::SetCameraPosition(const glm::vec3& position) {
@@ -81,31 +91,6 @@ void Camera::SetCameraSpeed(const float& speed) {
 }
 
 void Camera::MoveCamera() {
-	// as bad as this is i want to keep it at a point where i can just delete it all later.
-	if (InputHandler::Get().IsPressed(GLFW_KEY_W)) {
-		// move forward
-		this->m_CameraPosition += this->m_CameraSpeed * m_CameraFront;
-	}
-	if (InputHandler::Get().IsPressed(GLFW_KEY_S)) {
-		// move back
-		this->m_CameraPosition -= this->m_CameraSpeed * m_CameraFront;
-	}
-	if (InputHandler::Get().IsPressed(GLFW_KEY_D)) {
-		// move right
-		this->m_CameraPosition += glm::normalize(glm::cross(this->m_CameraFront, this->m_UpAxis)) * m_CameraSpeed;
-	}
-	if (InputHandler::Get().IsPressed(GLFW_KEY_A)) {
-		// move back
-		this->m_CameraPosition -= glm::normalize(glm::cross(this->m_CameraFront, this->m_UpAxis)) * m_CameraSpeed;
-	}
-	if (InputHandler::Get().IsPressed(GLFW_KEY_SPACE)) {
-		// go up
-		this->m_CameraPosition.y += m_CameraSpeed;
-	}
-	if (InputHandler::Get().IsPressed(GLFW_KEY_LEFT_CONTROL)) {
-		// go down
-		this->m_CameraPosition.y -= m_CameraSpeed;
-	}
-	this->m_CameraPosition.y = 0.0f;
+	
 }
 

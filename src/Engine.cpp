@@ -78,18 +78,20 @@ void Engine::Run() {
 	// Temp code
 	const float radius = 10.0f;
 	
-	Camera MainCamera;
+	//Camera MainCamera;
+	std::unique_ptr<Player> player = std::make_unique<Player>();
 	while (!glfwWindowShouldClose(WindowHandler::Get().GetWindow())) { // make this look nicer, put it into a function in the handler
 		// input first!
 		InputHandler::Get().Update();
+		
 		
 		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(1.0f, 0.0f, 0.0f, 1.0f); // red
 
 		ourShader.use();
+		player->Move();
 		
-
 		
 
 		/* // Usage of glm::lookAt();
@@ -105,7 +107,7 @@ void Engine::Run() {
 		//float camX = sin(glfwGetTime()) * radius;
 		//float camZ = cos(glfwGetTime()) * radius;
 		//glm::mat4 view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0, 0, 0), glm::vec3(0, 1.0f, 0));
-		MainCamera.MoveCamera();
+		//MainCamera.MoveCamera();
 		glm::mat4 projection;
 		projection = glm::perspective(glm::radians(45.0f), (float)WindowHandler::Get().GetWidth() / WindowHandler::Get().GetHeight(), 0.1f, 100.0f);
 
@@ -113,17 +115,20 @@ void Engine::Run() {
 			LOG("Running");
 			projection = glm::perspective(glm::radians(25.0f), (float)WindowHandler::Get().GetWidth() / WindowHandler::Get().GetHeight(), 0.1f, 100.0f);
 		}
-				ourShader.SetMat4("projection", projection);
-		ourShader.SetMat4("view", MainCamera.GetViewMatrix());
+	
+		ourShader.SetMat4("projection", projection);
+		ourShader.SetMat4("view", player->GetViewMatrix());
+		
 		glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
 		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		ourShader.SetMat4("model", model);
 		ourModel.Draw(ourShader);
+		player->UpdateCamera();
 		
 
-		MainCamera.Update();
+		//MainCamera.Update();
 		glfwSwapBuffers(WindowHandler::Get().GetWindow());
 	}
 }

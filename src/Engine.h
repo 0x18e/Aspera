@@ -9,7 +9,7 @@
 #include "Camera.h"
 #include<vector>
 #include "InputHandler.h"
-
+#include "Player.h"
 
 /*TODO
 * REWRITE THE ENTIRE Model.h class, this has a lot of weird code copied from opengl

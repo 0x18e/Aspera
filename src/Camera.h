@@ -6,6 +6,13 @@
 #include "WindowHandler.h"
 
 
+struct CameraState {
+	float fov;
+	glm::vec3 position;
+	glm::vec3 forward;
+	glm::vec3 viewPunchAngles;
+	glm::vec3 eyeOffset;
+};
 
 class Camera {
 
@@ -17,13 +24,17 @@ public:
 	void SetCameraSpeed(const float& speed);
 	void MoveCamera(); // Change this later, really bad right now just temporary
 	glm::mat4& GetViewMatrix();
-
 	glm::vec3& GetFront();
 	glm::vec3& GetUpAxis();
+	void Update(CameraState new_state);
+	float GetSensitivity();
 	
-	void Update();
-
 private:
+
+	// Interpolation activities
+	CameraState m_PreviousState;
+	CameraState m_CurrentState;
+
 	// Camera class
 	// A lot of these static variables are actually very stupid, no need to have them as static.
 	//glm::vec3 m_CameraVelocity; // only one instance of throughout all classes of type camera
