@@ -5,6 +5,10 @@ Logic::Logic() {
 	
 }
 
+Logic::~Logic()
+{
+}
+
 void Logic::Render() {
 	// render as fast as we possibly can
 
