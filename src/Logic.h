@@ -22,7 +22,8 @@ public:
 
 private:
 	
-
+	float m_fDeltaTime; // Might be static in order to track everywhere else
+	
 
 };
 
