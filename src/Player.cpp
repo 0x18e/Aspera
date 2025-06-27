@@ -3,7 +3,7 @@
 
 
 Player::Player() {
-
+	LOG("Player constructor even though this is a pointer...");
 	this->Spawn();
 }
 Player::~Player() {
@@ -14,30 +14,34 @@ void Player::Move() {
 	
 	// as bad as this is i want to keep it at a point where i can just delete it all later.
 	if (InputHandler::Get().IsPressed(GLFW_KEY_W)) {
-		LOG("moving forward");
 		// move forward
 		//this->m_CameraPosition += this->m_CameraSpeed * m_CameraFront;
-		this->m_Velocity += this->m_Camera.GetSensitivity() * this->m_PlayerCameraState.forward;
+		this->m_Velocity += this->m_fSpeed * this->m_PlayerCameraState.forward;
 	}
 	if (InputHandler::Get().IsPressed(GLFW_KEY_S)) {
 		// move back
-		this->m_Velocity -= this->m_Camera.GetSensitivity() * this->m_PlayerCameraState.forward;
+		this->m_Velocity -= this->m_fSpeed * this->m_PlayerCameraState.forward;
 	}
 	if (InputHandler::Get().IsPressed(GLFW_KEY_D)) {
 		// move right
 		this->m_Velocity += glm::normalize(
-			glm::cross(this->m_PlayerCameraState.forward, this->m_Camera.GetUpAxis())) * this->m_Camera.GetSensitivity();
+			glm::cross(this->m_PlayerCameraState.forward, this->m_Camera.GetUpAxis())) * this->m_fSpeed;
 	}
 	if (InputHandler::Get().IsPressed(GLFW_KEY_A)) {
 		// move back
 		this->m_Velocity -= glm::normalize(
-			glm::cross(this->m_PlayerCameraState.forward, this->m_Camera.GetUpAxis())) * this->m_Camera.GetSensitivity();
+			glm::cross(this->m_PlayerCameraState.forward, this->m_Camera.GetUpAxis())) * this->m_fSpeed;
 	}
-	/*
+
+	
 	if (InputHandler::Get().IsPressed(GLFW_KEY_SPACE)) {
 		// go up
-		this->m_CameraPosition.y += m_CameraSpeed;
+		//this->m_CameraPosition.y += m_CameraSpeed;
+		// impact velocity!!
+		m_bIsGrounded = false;
+		this->m_Velocity.y = 50.0f;
 	}
+	/*
 	if (InputHandler::Get().IsPressed(GLFW_KEY_LEFT_CONTROL)) {
 		// go down
 		this->m_CameraPosition.y -= m_CameraSpeed;
@@ -47,14 +51,28 @@ void Player::Move() {
 	
 	this->m_Position += m_Velocity * 1.0f / 144.0f;
 	
+	if (m_bIsGrounded) {
+		this->m_Position.y = 0.0f;
+		
+	}
+	else {
+		LOG(this->m_Velocity.y);
+		this->m_Velocity.y -= 0.15f;
+		if (this->m_Position.y <= 0.0f) {
+			this->m_Position.y = 0.0f;
+			this->m_bIsGrounded = true;
+		}
+	}
 	
+	m_Velocity *= 0.9f;
 }
 
 void Player::Spawn() {
 	this->m_fMass = 49.0f;
-	this->m_fSpeed = 400;
+	this->m_fSpeed = 5.0f;
 	this->m_Position = glm::vec3(0.0f, 0.0f, 3.0f);
 	this->m_Velocity = glm::vec3(0.0f, 0.0f, 0.0f);
+	this->m_bIsGrounded = true;
 }
 
 void Player::UpdateCamera() {

@@ -33,6 +33,7 @@ private:
 	float m_fSpeed;
 	float m_fMass;
 	float m_fFov;
+	bool m_bIsGrounded;
 
 	// player should not own any part of the camera's internals
 	Camera m_Camera;
