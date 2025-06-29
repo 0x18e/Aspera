@@ -15,7 +15,7 @@ find_package(glfw3 REQUIRED)
 message(STATUS "Compiling for mac")
 endif()
 add_executable(Boiler ${SOURCES})
-target_include_directories(Boiler PUBLIC "${PROJECT_SOURCE_DIR}/include/") # should include assimp files as well
+target_include_directories(Boiler PUBLIC "${PROJECT_SOURCE_DIR}/include/")
 target_link_directories(Boiler PRIVATE
     "${CMAKE_SOURCE_DIR}/lib/"
 )
@@ -30,3 +30,10 @@ else()
 message(STATUS "Linking assimp-vc143-mtd")
 target_link_libraries(Boiler PRIVATE glfw3 assimp-vc143-mtd)
 endif()
+
+
+add_custom_command(
+    TARGET Boiler POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/assets ${CMAKE_CURRENT_BINARY_DIR}/assets
+)
