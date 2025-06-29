@@ -3,7 +3,6 @@
 
 
 Player::Player() {
-	LOG("Player constructor even though this is a pointer...");
 	this->Spawn();
 }
 Player::~Player() {
@@ -41,6 +40,27 @@ void Player::Move() {
 		m_bIsGrounded = false;
 		this->m_Velocity.y = 50.0f;
 	}
+
+	if (InputHandler::Get().IsPressed(GLFW_KEY_F)) {
+		
+		if (this->m_fFov <= 24.0f) {
+			this->m_fFov = 24.0f;
+		}
+		else {
+			LOG("zooming in");
+			this->m_fFov -= 0.5f;
+		}
+	}
+	else {
+		if (this->m_fFov >= 75.0f) {
+			this->m_fFov = 75.0f;
+		}
+		else {
+			this->m_fFov += 0.5f;
+		}
+	}
+
+
 	/*
 	if (InputHandler::Get().IsPressed(GLFW_KEY_LEFT_CONTROL)) {
 		// go down
@@ -53,7 +73,6 @@ void Player::Move() {
 	
 	if (m_bIsGrounded) {
 		this->m_Position.y = 0.0f;
-		
 	}
 	else {
 		LOG(this->m_Velocity.y);
@@ -68,6 +87,7 @@ void Player::Move() {
 }
 
 void Player::Spawn() {
+	this->m_fFov = 75.0f;
 	this->m_fMass = 49.0f;
 	this->m_fSpeed = 5.0f;
 	this->m_Position = glm::vec3(0.0f, 0.0f, 3.0f);

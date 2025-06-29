@@ -27,8 +27,8 @@ elseif(LINUX)
 message(STATUS "Linking libassimp.so")
 target_link_libraries(Boiler PRIVATE glfw libassimp.so)
 else()
-message(STATUS "Linking assimp-vc143-mtd")
-target_link_libraries(Boiler PRIVATE glfw3 assimp-vc143-mtd)
+message(STATUS "Linking assimp-vc143-mtd & openal32.lib")
+target_link_libraries(Boiler PRIVATE glfw3 assimp-vc143-mtd openal32)
 endif()
 
 

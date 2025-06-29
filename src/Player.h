@@ -19,6 +19,7 @@ public:
 	void UpdateCamera(); // This should update at the end of our move function
 	glm::mat4& GetViewMatrix();
 	glm::vec3 GetForwardVector();
+	float GetFov() { return this->m_fFov; }
 private:
 	CameraState BuildCamera(); // runs per frame or will eventually get cached for interpolation
 
