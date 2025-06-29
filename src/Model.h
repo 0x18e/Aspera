@@ -58,7 +58,12 @@ private:
             return;
         }
         // retrieve the directory path of the filepath
-        directory = path.substr(0, path.find_last_of('\\'));
+        size_t slash = path.find_last_of("/\\");
+        if (slash != std::string::npos)
+            directory = path.substr(0, slash);
+        else
+            directory = ".";
+
         LOG("Directory here: " << directory);
 
         // process ASSIMP's root node recursively
@@ -189,7 +194,7 @@ private:
                 }
             }
             if (!skip)
-            {   // if texture hasn't been loaded already, load it
+            {   // if texture hasn't been loaded already, load it, if it fails to load it uses the default debug_empty.png
                 Texture texture;
                 texture.id = TextureFromFile(str.C_Str(), this->directory);
                 //texture.id = TextureFromFile(str.C_Str(), "W:\\Projects\\repos\\Aspera\\models");
