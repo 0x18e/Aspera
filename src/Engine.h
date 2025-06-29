@@ -1,20 +1,16 @@
 #pragma once
 #include<iostream>
-#include "Model.h"
-#include "glad/glad.h"
-#include "WindowHandler.h"
-#include "stb_image.h"
-#include "Shader.h"
-#include "tools.h"
-#include "Camera.h"
-#include<vector>
-#include "InputHandler.h"
-#include "Player.h"
+#include "Logic.h"
+#include "openal/al.h"
+#include "openal/alc.h"
+
 
 /*TODO
 * REWRITE THE ENTIRE Model.h class, this has a lot of weird code copied from opengl
 */
+class GlobalVars {
 
+};
 
 class Engine {
 
@@ -30,7 +26,8 @@ public:
 	void Exit();
 
 private:
-	
+	Logic m_Logic;
 	float dt; // Handling delta time, about time I added this
 
+	
 };
