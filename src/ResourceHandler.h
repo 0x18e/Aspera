@@ -17,10 +17,10 @@ public:
 	Model* GetModel(const std::string& name);
 	Shader* GetShader(const std::string& name);
 	~ResourceHandler();
-	ResourceHandler();
+	
 protected:
 private:
-	 
+	ResourceHandler();
 	static ResourceHandler m_Instance;
 
 	// all resource containers
